@@ -1,4 +1,5 @@
 -r base.txt
 
+django_redis
 gevent==1.2.0
 gunicorn==19.6.0

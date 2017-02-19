@@ -22,6 +22,7 @@ from django.conf import settings
 urlpatterns = [
     url(settings.ADMIN_URL, admin.site.urls),
     url(r'^users/', include('exo.users.urls', namespace='users')),
+    url(r'^model3d/', include('exo.figures.urls', namespace='model3d')),
 ]
 
 if settings.DEBUG:
