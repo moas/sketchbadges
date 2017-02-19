@@ -11,7 +11,7 @@ from .factories import Model3DFactory
 @override_settings(MINIMUM_VIEWS_FOR_STAR_BADGE=5)
 class TestStarBadge(TestCase):
 
-    BADGE_LEVEL = "1"
+    BADGE_LEVEL = settings.BADGE_LEVEL.BADGE_STAR.value
 
     def setUp(self):
         group = GroupFactory.create(name=settings.DESIGNER_GROUP_NAME)

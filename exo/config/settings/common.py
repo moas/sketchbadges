@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
+import enum
 
 import environ
 
@@ -210,10 +211,17 @@ USER_GENDERS = [
 
 # Badges configuration
 
+
+@enum.unique
+class BADGE_LEVEL(enum.IntEnum):
+    BADGE_STAR = "1"
+    BADGE_COLLECTOR = "2"
+    BADGE_PIONNEER = "3"
+
 BADGE_LEVEL_CHOICES = (
-    ("1", _('Star')),
-    ("2", _('Collector')),
-    ("3", _('Pionneer')),
+    (BADGE_LEVEL.BADGE_STAR.value, _('Star')),
+    (BADGE_LEVEL.BADGE_COLLECTOR.value, _('Collector')),
+    (BADGE_LEVEL.BADGE_PIONNEER.value, _('Pionneer')),
 )
 
 MINIMUM_VIEWS_FOR_STAR_BADGE = 1000
