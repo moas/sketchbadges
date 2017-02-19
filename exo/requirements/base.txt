@@ -5,3 +5,4 @@ django-model-utils==2.6
 awesome-slugify==1.6.5
 pyyaml
 django_autoslug
+django-badges==0.2.0

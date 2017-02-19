@@ -17,7 +17,7 @@ import environ
 from django.utils.translation import ugettext_lazy as _
 
 ROOT_DIR = environ.Path(__file__) - 3
-APPS_DIR = ROOT_DIR.path('exo')
+APPS_DIR = ROOT_DIR.path('studio')
 
 env = environ.Env()
 env.read_env(ROOT_DIR.path('.env').root)
@@ -53,12 +53,13 @@ DJANGO_APPS = (
     'django.contrib.admin',
 )
 THIRD_PARTY_APPS = (
+    "badges",
 )
 
 # Apps specific for this project go here.
 LOCAL_APPS = (
-    'exo.users.apps.UsersConfig',
-    'exo.figures.apps.FiguresConfig',
+    'studio.users.apps.UsersConfig',
+    'studio.figures.apps.FiguresConfig',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -68,7 +69,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-FIXTURE_DIRS
 FIXTURE_DIRS = (
-    str(APPS_DIR.path('fixtures')),
+    APPS_DIR.path('fixtures').root,
 )
 
 # EMAIL CONFIGURATION
@@ -117,7 +118,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 AUTH_USER_MODEL = 'users.User'
-LOGIN_REDIRECT_URL = 'users:redirect'
+LOGIN_REDIRECT_URL = 'user:redirect'
 LOGIN_URL = 'account_login'
 
 # Database
@@ -206,3 +207,15 @@ USER_GENDERS = [
     ('Miss', _('Miss')),
     ('Mr', _('Mister')),
 ]
+
+# Badges configuration
+
+BADGE_LEVEL_CHOICES = (
+    ("1", _('Star')),
+    ("2", _('Collector')),
+    ("3", _('Pionneer')),
+)
+
+MINIMUM_VIEWS_FOR_STAR_BADGE = 1000
+MINIMUM_UPLOAD_FOR_COLLECTOR_BADGE = 5
+MINIMUM_YEAR_FOR_PIONNEER_BADGE = 1

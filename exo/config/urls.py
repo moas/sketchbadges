@@ -21,8 +21,8 @@ from django.conf import settings
 
 urlpatterns = [
     url(settings.ADMIN_URL, admin.site.urls),
-    url(r'^users/', include('exo.users.urls', namespace='users')),
-    url(r'^model3d/', include('exo.figures.urls', namespace='model3d')),
+    url(r'^u/', include('studio.users.urls', namespace='user')),
+    url(r'^models/', include('studio.figures.urls', namespace='models')),
 ]
 
 if settings.DEBUG:

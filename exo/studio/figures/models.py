@@ -8,7 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from autoslug import AutoSlugField
 
-from ..helpers.models import CommonModels
+from studio.helpers.models import CommonModels
 
 # Create your models here.
 
@@ -20,6 +20,7 @@ class Model3D(CommonModels):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         limit_choices_to={
+            'is_active': True,
             'groups__name__in': [settings.DESIGNER_GROUP_NAME]
         }
     )
