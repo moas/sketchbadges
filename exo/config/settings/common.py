@@ -12,34 +12,74 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 
 import os
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+import environ
 
+from django.utils.translation import ugettext_lazy as _
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
+ROOT_DIR = environ.Path(__file__) - 3
+APPS_DIR = ROOT_DIR.path('exo')
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'r3a24d^iweu%y1gt^_iw6as5&-#dx#n&u$gdj$zdypfxo$teg+'
+env = environ.Env()
+env.read_env(ROOT_DIR.path('.env').root)
+
+# MANAGER CONFIGURATION
+# ------------------------------------------------------------------------------
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
+ADMINS = (
+    ("""Oscar LASM""", 'lasm.landry@gmail.com'),
+)
+
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#managers
+MANAGERS = ADMINS
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool('DEBUG', default=True)
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
-
-INSTALLED_APPS = [
-    'django.contrib.admin',
+DJANGO_APPS = (
+    # Default Django apps:
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-]
 
-MIDDLEWARE_CLASSES = [
+    'django.contrib.humanize',
+
+    # Admin
+    'django.contrib.admin',
+)
+THIRD_PARTY_APPS = (
+)
+
+# Apps specific for this project go here.
+LOCAL_APPS = (
+    'exo.users.apps.UsersConfig',
+)
+
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+
+# FIXTURE CONFIGURATION
+# ------------------------------------------------------------------------------
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-FIXTURE_DIRS
+FIXTURE_DIRS = (
+    str(APPS_DIR.path('fixtures')),
+)
+
+# EMAIL CONFIGURATION
+# ------------------------------------------------------------------------------
+EMAIL_BACKEND = env.str('EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend')
+DEFAULT_FROM_EMAIL = 'contact@sketchbadges.com'
+
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = env.str('SECRET_KEY', default='r3a24d^iweu%y1gt^_iw6as5&-#dx#n&u$gdj$zdypfxo$teg+')
+
+MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -48,28 +88,36 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
+)
 
-ROOT_URLCONF = 'exo.urls'
+ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [APPS_DIR.path('templates').root],
         'APP_DIRS': True,
         'OPTIONS': {
+            'debug': DEBUG,
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'exo.wsgi.application'
+WSGI_APPLICATION = 'config.wsgi.application'
 
+AUTH_USER_MODEL = 'users.User'
+LOGIN_REDIRECT_URL = 'users:redirect'
+LOGIN_URL = 'account_login'
 
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
@@ -77,7 +125,7 @@ WSGI_APPLICATION = 'exo.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(ROOT_DIR.path('db').root, 'badges.db')
     }
 }
 
@@ -100,11 +148,16 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
+
+SITE_ID = 1
 
 TIME_ZONE = 'UTC'
 
@@ -119,3 +172,54 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = ROOT_DIR.path('staticfiles').root
+
+STATICFILES_DIRS = (
+    APPS_DIR.path('static').root,
+)
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
+
+MEDIA_ROOT = ROOT_DIR.path('media').root
+
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#media-url
+MEDIA_URL = '/media/'
+
+# Location of root django.contrib.admin URL, use {% url 'admin:index' %}
+ADMIN_URL = r'^admin/'
+
+# SLUGLIFIER
+AUTOSLUG_SLUGIFY_FUNCTION = 'slugify.slugify'
+
+
+# CACHING
+# ------------------------------------------------------------------------------
+
+REDIS_LOCATION = '{0}/{1}'.format(env('REDIS_URL', default='redis://127.0.0.1:6379'), 1)
+# Heroku URL does not pass the DB number, so we parse it in
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': REDIS_LOCATION,
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            "PASSWORD": "",
+            'IGNORE_EXCEPTIONS': True,  # mimics memcache behavior.
+                                        # http://niwinz.github.io/django-redis/latest/#_memcached_exceptions_behavior
+        }
+    }
+}
+
+DJANGO_REDIS_LOG_IGNORED_EXCEPTIONS = True
+
+# users model
+DESIGNER_GROUP_NAME = 'designer'
+USER_GENDERS = [
+    ('Mrs', _('Madame')),
+    ('Miss', _('Miss')),
+    ('Mr', _('Mister')),
+]
