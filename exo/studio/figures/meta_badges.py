@@ -23,7 +23,7 @@ class StarBadge(BadgeMixin, ModelBadgeMixin, MetaBadge):
         return instance.view_counter >= settings.MINIMUM_VIEWS_FOR_STAR_BADGE
 
 
-class CollectorBadge(ModelBadgeMixin, MetaBadge):
+class CollectorBadge(BadgeMixin, ModelBadgeMixin, MetaBadge):
     id = 'collector'
     title = _('Collector')
     description = _('Award for %(val)s models or more') % {'val': settings.MINIMUM_UPLOAD_FOR_COLLECTOR_BADGE}
