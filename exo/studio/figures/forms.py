@@ -36,3 +36,6 @@ class EvaluationModel3DForm(forms.ModelForm):
     class Meta:
         model = EvaluationModel3D
         exclude = ('is_active', )
+    
+    def clean_model_3d(self):
+        return self.initial['model_3d']
