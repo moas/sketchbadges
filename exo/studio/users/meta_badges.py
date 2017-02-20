@@ -15,7 +15,7 @@ class PionneerBadge(BadgeMixin, MetaBadge):
     title = _('Pionneer')
     description = _('Award for registered user since %(val)s year(s)') % {
         'val': settings.MINIMUM_YEAR_FOR_PIONNEER_BADGE}
-    level = '3'
+    level = settings.BADGE_LEVEL.BADGE_PIONNEER.value
 
     def __init__(self):
         super(self.__class__, self).__init__()
