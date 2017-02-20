@@ -31,7 +31,7 @@ class EvaluationModel3DForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['model_3d'].widgets = forms.HiddenInput()
+        self.fields['model_3d'].widget = forms.HiddenInput()
 
     class Meta:
         model = EvaluationModel3D

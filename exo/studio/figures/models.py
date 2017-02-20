@@ -37,7 +37,7 @@ class Model3D(CommonModels):
         return _("Model %(uid)s") % {'uid': self.uid.hex}
 
     def get_absolute_url(self):
-        return reverse_lazy('figures:model-detail', self.designer.username, self.uid.hex)
+        return reverse_lazy('models:detail', args=[self.pk])
 
 
 @python_2_unicode_compatible

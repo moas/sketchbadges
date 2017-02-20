@@ -6,3 +6,17 @@
     <span><a href="{% url 'user:create' %}">{% trans 'Register' %}</a></span>
     <span><a href="{% url 'user:login' %}">{% trans 'Login' %}</a></span>
 </div>
+
+<div>
+    <span>{% trans 'List of model' %}</span>
+    <ul>
+        {% for item in items %}
+            <li>
+                <b>{{ item.name }}</b> {% trans 'by' %} <i>{{ item.designer.get_full_name }}</i>,
+                <a href="{{ item.get_absolute_url }}">{% trans 'View' %}</a>
+            </li>
+        {% empty %}
+            <li>{% trans 'No model found' %}</li>
+        {% endfor %}
+    </ul>
+</div>

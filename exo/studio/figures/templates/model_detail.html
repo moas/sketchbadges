@@ -1,0 +1,20 @@
+{% load i18n %}
+
+{% trans 'Model name' %}: <b>{{ item.name }}</b>
+
+<div>
+    {% trans 'List of comments' %}
+    <ul>
+        {% for comment in item.evaluationmodel3d_set.all %}
+            <li>{{ comment.commentator }}: {% trans 'Rating' %}:
+                {{ comment.evaluation }}, {{ comment.comment }}</li>
+        {% empty %}
+            <li>{% trans 'No comment' %}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div>
+    <a href=".."> {% trans "Back" %}</a>
+    <a href="{% url 'models:add-comment' item.pk %}"> {% trans "Add comment" %}</a>
+</div>

@@ -17,8 +17,8 @@ urlpatterns = [
         name='detail'
     ),
     url(
-        regex=r'^(?P<pk>\d+)/change/$',
-        view=views.ChangeModel3DView.as_view(),
-        name='change'
+        regex=r'^(?P<pk>\d+)/add-comment/$',
+        view=views.AddModel3DEvaluationView.as_view(),
+        name='add-comment'
     )
 ]
