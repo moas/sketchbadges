@@ -1,0 +1,16 @@
+{% load i18n %}
+<ul>
+    {% for item in items %}
+        <li>
+            <a href="{% url 'user:model-detail' item.uid.hex %}">{{ item.name }}</a> |
+            {% trans 'Active' %} <i>{% if item.is_active %}Yes{% else %}No{% endif %}</i>
+        </li>
+    {% empty %}
+        <li>{% trans 'No model found' %}</li>
+    {% endfor %}
+</ul>
+
+<div>
+    <a href="..">{% trans 'Back' %}</a>
+    <a href="{% url 'user:add-model' %}">{% trans 'Add model' %}</a>
+</div>

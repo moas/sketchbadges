@@ -1,0 +1,8 @@
+{% load i18n %}
+
+<h1>{% trans "Welcome" %}</h1>
+
+<div>
+    <span><a href="{% url 'user:create' %}">{% trans 'Register' %}</a></span>
+    <span><a href="{% url 'user:login' %}">{% trans 'Login' %}</a></span>
+</div>

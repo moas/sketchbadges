@@ -2,6 +2,7 @@ import uuid
 
 from django.conf import settings
 from django.db import models
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils.encoding import python_2_unicode_compatible
 from django.core.urlresolvers import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
@@ -44,7 +45,12 @@ class EvaluationModel3D(CommonModels):
     model_3d = models.ForeignKey(Model3D, limit_choices_to={'is_active': True})
     commentator = models.EmailField()
     comment = models.TextField(null=True, blank=True)
-    evaluation = models.IntegerField()
+    evaluation = models.IntegerField(
+        validators=[
+            MinValueValidator(limit_value=0),
+            MaxValueValidator(limit_value=5)
+        ]
+    )
 
     class Meta:
         verbose_name = _('Evaluation')

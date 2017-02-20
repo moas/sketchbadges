@@ -120,7 +120,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 AUTH_USER_MODEL = 'users.User'
 LOGIN_REDIRECT_URL = 'user:redirect'
-LOGIN_URL = 'account_login'
+LOGIN_URL = 'user:login'
 
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases

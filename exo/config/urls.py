@@ -22,7 +22,7 @@ from django.conf import settings
 urlpatterns = [
     url(settings.ADMIN_URL, admin.site.urls),
     url(r'^u/', include('studio.users.urls', namespace='user')),
-    url(r'^models/', include('studio.figures.urls', namespace='models')),
+    url(r'^', include('studio.figures.urls', namespace='models')),
 ]
 
 if settings.DEBUG:

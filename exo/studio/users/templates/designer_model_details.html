@@ -1,0 +1,19 @@
+{% load i18n %}
+
+{% trans 'Name' %}: {{ object.name }} <br>
+{% trans 'UID' %}: {{ object.uid.hex }} <br>
+{% trans 'Views counter' %}: {{ object.view_counter }}<br>
+
+{% trans "Evaluations" %}
+{# L'ideal serait de charger les commentaires via une vue ajax #}
+{% for item in object.evaluation_set.all %}
+    <p>
+        <span>{% trans "Email" %}: {{ item.commentator }}</span>
+        <span>{% trans "Comment" %}: {{ item.comment }}</span>
+        <span>{% trans "Rating" %}: {{ item.evaluation }}</span>
+    </p>
+{% empty %}
+    <p>{% trans 'No evaluation report' %}</p>
+{% endfor %}
+<br>
+<a href="..">{% trans 'Back' %}</a> | <a href="{% url 'user:model-change' object.uid.hex %}">{% trans "Change" %}</a>

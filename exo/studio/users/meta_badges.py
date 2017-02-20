@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.utils.translation import ugettext_lazy as _
 from badges.utils import MetaBadge
 
@@ -15,6 +16,14 @@ class PionneerBadge(BadgeMixin, MetaBadge):
     description = _('Award for registered user since %(val)s year(s)') % {
         'val': settings.MINIMUM_YEAR_FOR_PIONNEER_BADGE}
     level = '3'
+
+    def __init__(self):
+        super(self.__class__, self).__init__()
+        user_logged_in.connect(self._auth_callback, sender=self.model)
+        user_logged_out.connect(self._auth_callback, sender=self.model)
+
+    def _auth_callback(self, **kwargs):
+        self.award_ceremony(instance=kwargs['user'])
 
     def get_user(self, instance):
         return instance

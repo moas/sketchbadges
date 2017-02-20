@@ -1,0 +1,32 @@
+{% load i18n %}
+
+{% trans 'Your fullname' %}: {{ object.get_full_name }}
+<div>
+    <a href="{% url 'user:update' user.pk %}">{% trans 'Change profile' %}</a>
+    <a href="{% url 'user:change-password' %}">{% trans 'Change password' %}</a>
+</div>
+
+<br>
+
+<div>
+    {% trans 'Your badge list' %}:
+    <ul>
+        {% for badge in object.badges.all %}
+            <li>
+                <b>{{ badge.title }}</b>
+            </li>
+        {% empty %}
+            <li>{% trans 'No badges found' %}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+
+<div>
+    <a href="{% url 'user:model-list' %}">{% trans 'List models' %}</a> | <a href="{% url 'user:add-model' %}">{% trans 'Add model' %}</a>
+</div>
+
+
+<div>
+    <a href="{% url 'user:logout' %}">{% trans 'Logout' %}</a>
+</div>

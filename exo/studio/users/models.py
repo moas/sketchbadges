@@ -2,12 +2,18 @@
 from __future__ import unicode_literals, absolute_import
 
 from django.contrib.auth.models import AbstractUser
+from django.utils.functional import cached_property
 from django.core.urlresolvers import reverse_lazy
 from django.conf import settings
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from model_utils import Choices
+
+try:
+    from badges.models import Badge
+except ImportError:
+    Badge = None
 
 
 @python_2_unicode_compatible
@@ -27,7 +33,7 @@ class User(AbstractUser):
         return self.username
 
     def get_absolute_url(self):
-        return reverse_lazy('users:detail', kwargs={'username': self.username})
+        return reverse_lazy('user:detail', kwargs={'pk': self.pk})
 
     def get_full_name(self):
         ret = super().get_full_name()
@@ -36,3 +42,9 @@ class User(AbstractUser):
     def get_short_name(self):
         ret = super().get_short_name()
         return ret or self.name
+
+    @cached_property
+    def badges(self):
+        if Badge is None:
+            return []
+        return Badge.objects.filter(user=self)

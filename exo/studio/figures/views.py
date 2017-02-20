@@ -7,9 +7,7 @@ from .models import EvaluationModel3D, Model3D
 
 class ListModel3DView(generic.ListView):
     model = Model3D
-
-    def get_queryset(self):
-        pass
+    template_name = 'home.html'
 
 
 class DetailModel3DView(generic.DetailView):
