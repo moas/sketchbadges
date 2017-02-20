@@ -126,10 +126,8 @@ LOGIN_URL = 'user:login'
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(ROOT_DIR.path('db').root, 'badges.db')
-    }
+    'default': env.db('DATABASE_URL', default='sqlite:///{}'.format(
+        os.path.join(ROOT_DIR.path('db').root, 'badges.db')))
 }
 
 
